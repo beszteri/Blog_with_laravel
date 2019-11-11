@@ -1,4 +1,4 @@
-//minden projektben használható, csak be kell szúrni az app.blade.php-be
+<!--minden projektben használható, csak be kell szúrni az app.blade.php-be-->
 
 @if(count($errors) > 0)
     @foreach($errors->all() as $error)

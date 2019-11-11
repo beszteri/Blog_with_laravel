@@ -15,7 +15,7 @@
     </execution>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/firstLaravel" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -141,7 +141,7 @@
       <option name="presentableId" value="Default" />
       <updated>1573115835120</updated>
       <workItem from="1573115837557" duration="12614000" />
-      <workItem from="1573461622175" duration="7864000" />
+      <workItem from="1573461622175" duration="12408000" />
     </task>
     <servers />
   </component>
