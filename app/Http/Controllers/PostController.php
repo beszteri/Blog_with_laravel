@@ -30,6 +30,16 @@ class PostController extends Controller
     }
 
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -50,11 +60,27 @@ class PostController extends Controller
         //csak ha ki van töltve a form akkor lép tovább
         $this->validate($request, [
             'title' => 'required',
-            'body' => 'required'
+            'body' => 'required',
+            'cover_image' => 'image|nullable|max:1999'
         ]);
+
+        //file feltöltés kezelése
+        if($request->hasFile('cover_image')){
+            //fájlnév és kiterjesztés:
+            $filenameWithExt = $request->file('cover_image');
+            //csak fájlnév:
+
+            //csak kiterjesztés:
+            
+        }else{
+            $fileNameToStore = 'noimage.jpg';
+        }
+
+
         $post = new Post();
         $post->title = $request->input('title');
         $post->body = $request->input('body');
+        $post->user_id = auth()->user()->id;
         $post->save();
         return redirect('/posts')->with('success', 'Post Created');
     }
@@ -80,6 +106,9 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
+        if(auth()->user()->id !== $post->user_id) {
+            return redirect('/posts')->with('error', 'Unauthorized Page');
+        }
         return view('posts.edit')->with('post', $post);
     }
 
@@ -112,6 +141,9 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
+        if(auth()->user()->id !== $post->user_id) {
+            return redirect('/posts')->with('error', 'Unauthorized Page');
+        }
         $post->delete();
         return redirect('/posts')->with('success', 'Post Deleted');
     }

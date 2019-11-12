@@ -112,6 +112,11 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\firstLaravel\resources\views" />
+    </key>
+  </component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -141,7 +146,7 @@
       <option name="presentableId" value="Default" />
       <updated>1573115835120</updated>
       <workItem from="1573115837557" duration="12614000" />
-      <workItem from="1573461622175" duration="12408000" />
+      <workItem from="1573461622175" duration="21166000" />
     </task>
     <servers />
   </component>
