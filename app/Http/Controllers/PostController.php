@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -52,7 +53,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -65,14 +66,18 @@ class PostController extends Controller
         ]);
 
         //file feltöltés kezelése
-        if($request->hasFile('cover_image')){
+        if ($request->hasFile('cover_image')) {
             //fájlnév és kiterjesztés:
-            $filenameWithExt = $request->file('cover_image');
+            $filenameWithExt = $request->file('cover_image')->getClientOriginalName();
             //csak fájlnév:
-
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             //csak kiterjesztés:
-            
-        }else{
+            $extension = $request->file('cover_image')->getClientOriginalExtension();
+            //fájlnév mentéshez
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+            //feltöltés
+            $path = $request->file('cover_image')->storeAs('public/cover_images', $fileNameToStore);
+        } else {
             $fileNameToStore = 'noimage.jpg';
         }
 
@@ -81,6 +86,7 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         $post->user_id = auth()->user()->id;
+        $post->cover_image = $fileNameToStore;
         $post->save();
         return redirect('/posts')->with('success', 'Post Created');
     }
@@ -88,7 +94,7 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -100,13 +106,13 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $post = Post::find($id);
-        if(auth()->user()->id !== $post->user_id) {
+        if (auth()->user()->id !== $post->user_id) {
             return redirect('/posts')->with('error', 'Unauthorized Page');
         }
         return view('posts.edit')->with('post', $post);
@@ -115,19 +121,36 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             'title' => 'required',
-            'body' => 'required'
+            'body' => 'required',
+            'cover_image' => 'image|nullable|max:1999'
         ]);
+        //file feltöltés kezelése
+        if ($request->hasFile('cover_image')) {
+            //fájlnév és kiterjesztés:
+            $filenameWithExt = $request->file('cover_image')->getClientOriginalName();
+            //csak fájlnév:
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            //csak kiterjesztés:
+            $extension = $request->file('cover_image')->getClientOriginalExtension();
+            //fájlnév mentéshez
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+            //feltöltés
+            $path = $request->file('cover_image')->storeAs('public/cover_images', $fileNameToStore);
+        }
         $post = Post::find($id);
         $post->title = $request->input('title');
         $post->body = $request->input('body');
+        if ($request->hasFile('cover_image')) {
+            $post->cover_image = $fileNameToStore;
+        }
         $post->save();
         return redirect('/posts')->with('success', 'Post Updated');
     }
@@ -135,14 +158,17 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $post = Post::find($id);
-        if(auth()->user()->id !== $post->user_id) {
+        if (auth()->user()->id !== $post->user_id) {
             return redirect('/posts')->with('error', 'Unauthorized Page');
+        }
+        if ($post->cover_image != 'noimage.jpg') {
+            Storage::delete('public/cover_images/' . $post->cover_image);
         }
         $post->delete();
         return redirect('/posts')->with('success', 'Post Deleted');

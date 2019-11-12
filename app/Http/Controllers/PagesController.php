@@ -6,24 +6,28 @@ use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
-    public function index(){
-        $title = 'Welcome';
-        /*kétféleképpen lehet átadni egy változót a view-nek, így:
-        return view('pages.index', compact('title'));
-        vagy így:*/
-        return view('pages.index')->with('title', $title);
-    }
+    /* public function index(){
+         $title = 'Welcome';
+         kétféleképpen lehet átadni egy változót a view-nek, így:
+         return view('pages.index', compact('title'));
+         vagy így:
+         return view('pages.index')->with('title', $title);
+     }*/
 
-    public function about(){
-        $title = 'About us';
-        return view('pages.about')->with('title', $title);
-    }
-
-    public function services(){
+    public function about()
+    {
         $data = array(
-            'title' => 'services',
-            'services' => ['web design', 'programming']
+            'title' => 'About this App',
+            'about' => 'This is my first Blog webapp built with laravel 6'
         );
-        return view('pages.services')->with($data);
+        return view('pages.about')->with($data);
     }
+
+    /* public function services(){
+         $data = array(
+             'title' => 'services',
+             'services' => ['web design', 'programming']
+         );
+         return view('pages.services')->with($data);
+     }*/
 }

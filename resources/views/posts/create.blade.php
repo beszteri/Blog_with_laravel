@@ -13,7 +13,7 @@
             <textarea class="form-control" name="body" cols="30" rows="10" placeholder="Body Text"></textarea>
         </div>
         <div class="form-group">
-            <input type="file" name="cover_image" />
+            <input type="file" name="cover_image"/>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
