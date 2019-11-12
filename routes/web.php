@@ -11,6 +11,8 @@
 |
 */
 
+//1. beérkező kérések átirányítása
+
 Route::get('/', 'HomeController@index');
 
 Route::get('/about', 'PagesController@about');

@@ -11,6 +11,7 @@ class CreatePostsTable extends Migration
      *
      * @return void
      */
+    //posts tábla létrehozása az alábbi paraméterekkel
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {

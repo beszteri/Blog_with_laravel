@@ -132,6 +132,7 @@ class PostController extends Controller
             'body' => 'required',
             'cover_image' => 'image|nullable|max:1999'
         ]);
+
         //file feltöltés kezelése
         if ($request->hasFile('cover_image')) {
             //fájlnév és kiterjesztés:
@@ -149,7 +150,7 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         if ($request->hasFile('cover_image')) {
-            $post->cover_image = $fileNameToStore;
+            $post->cover_image = $fileNameToStore ?? null;
         }
         $post->save();
         return redirect('/posts')->with('success', 'Post Updated');
